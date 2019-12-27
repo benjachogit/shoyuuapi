@@ -3,7 +3,7 @@ var Request = require('tedious').Request;
 var TYPES = require('tedious').TYPES;
 var dbconfig = require('./db');
 
-const signup  = (req,res) => {
+const signup  = (request,response) => {
     console.log(request.body)
 
     var id = request.body.id
@@ -13,10 +13,11 @@ const signup  = (req,res) => {
     var mail = request.body.mail
     var pid = request.body.pid
     var type = request.body.type
+    var imageurl = request.body.imageurl
 
     var connection = new Connection(dbconfig.config);
     var rowss = []
-
+     console.log(request.body)
     // Attempt to connect and execute queries if connection goes through
     
     connection.on('connect', async function(err)
@@ -30,7 +31,7 @@ const signup  = (req,res) => {
             {
                   // Read all rows from table
                 let request = new Request(
-                    "INSERT INTO shoyuu VALUES(@id,@fname,@lname,@phone,@email,@pid,)",
+                    "INSERT INTO shoyuu VALUES(@id,@fname,@lname,@phone,@email,@pid,@type,@imageurl)",
                     function(err, rowCount, rows)
                     {
                         if(err){
@@ -57,6 +58,7 @@ const signup  = (req,res) => {
                 
                 request.addParameter('type',TYPES.VarChar ,type);  
 
+                request.addParameter('imageurl',TYPES.VarChar ,imageurl);  
 
                     
 
